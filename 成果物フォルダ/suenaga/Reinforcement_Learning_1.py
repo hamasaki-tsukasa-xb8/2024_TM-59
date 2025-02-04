@@ -68,6 +68,7 @@ for episode in range(1000):  # 1000回の学習を行う
     
     if user_input == "exit":
         break
+    
 
     current_site = user_input
 
