@@ -3,7 +3,7 @@ import random
 from parameters import make_tendency_matrix, make_similality_matrix
 
 class RecommenderAgent:
-    def __init__(self, sites, q_table=None, alpha=0.1, gamma=0.9, epsilon=0.6):
+    def __init__(self, sites, q_table=None, alpha=0.3, gamma=0.9, epsilon=0.4):
         self.sites = sites
         self.alpha = alpha  # 学習率
         self.gamma = gamma  # 割引率
@@ -63,13 +63,14 @@ def reinforce_main():
     tendency_tables = make_tendency_matrix()
 
     reward_table = np.einsum('ij,jkl->ikl', similarity_matrix, tendency_tables)
+    # print(reward_table)
 
     # 各プレイヤーに対してエージェントのインスタンスを作成
     # agents = {player: RecommenderAgent(sites, q_table=q_tables[idx]) for idx, player in enumerate(players)}
     agents = {player: RecommenderAgent(sites) for player in players}
 
     # # シミュレーション（例）
-    for episode in range(1000):  # 1000回の学習を行う
+    for episode in range(100):  # 1000回の学習を行う
         for player_idx, player in enumerate(players):
             agent = agents[player]
             current_site = random.choice(sites)  # ランダムに開始サイトを選択
@@ -102,13 +103,13 @@ def reinforce_main():
 
     # 各プレイヤーの学習後のQテーブルを表示
     qtable_box = []
-    player_box = []
+    # player_box = []
     for player in players:
         # print(f"学習後のQテーブル ({player}):")
         # print(agents[player].q_table)
         add = agents[player].q_table
         qtable_box.append(add)
-    print(np.array(qtable_box).shape)
+    # print(np.array(qtable_box).shape)
     # print(qtable_box)
     return qtable_box
 

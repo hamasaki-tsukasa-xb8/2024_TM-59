@@ -68,6 +68,35 @@ def make_tendency_matrix():
     # print("Tendency Transition Probabilities (5x5x5 matrix):")
     # print(tendency_transition_probabilities)
 
+    tendency_transition_probabilities = np.array([
+        [[0,1,0,0,0],
+         [0,0,1,0,0],
+         [0,0,0,1,0],
+         [0,0,0,0,1],
+         [1,0,0,0,0]],
+         [[0,0,0,0,1],
+         [0,0,0,1,0],
+         [0,0,1,0,0],
+         [0,1,0,0,0],
+         [1,0,0,0,0]],
+         [[0,0,0,1,0],
+         [0,0,1,0,0],
+         [0,1,0,0,0],
+         [1,0,0,0,0],
+         [0,0,0,0,1]],
+         [[1,0,0,0,0],
+         [0,1,0,0,0],
+         [0,0,1,0,0],
+         [0,0,0,1,0],
+         [0,0,0,0,1]],
+         [[0,1,0,0,0],
+         [0,0,1,0,0],
+         [0,0,0,1,0],
+         [0,0,0,0,1],
+         [1,0,0,0,0]]])
+    # print("Tendency Transition Probabilities (5x5x5 matrix):")
+    # print(tendency_transition_probabilities)
+
     return tendency_transition_probabilities
 
 make_tendency_matrix()
