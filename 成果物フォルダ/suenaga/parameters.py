@@ -8,6 +8,12 @@ def make_similality_matrix():
     [0.05, 0.05, 0.80, 0.05, 0.05],
     [0.05, 0.05, 0.05, 0.80, 0.05],
     [0.05, 0.05, 0.05, 0.05, 0.80]])
+    # similarity_matrix = np.array([
+    # [1, 0, 0, 0, 0],
+    # [0, 1, 0, 0, 0],
+    # [0, 0, 1, 0, 0],
+    # [0, 0, 0, 1, 0],
+    # [0, 0, 0, 0, 1]])
     return similarity_matrix
 
 
@@ -33,19 +39,19 @@ def make_tendency_matrix():
         change_matrix = np.array([])
 
         for i in range(num_sites):
-            # Assign a high probability (>= 0.5) to one unique site
+            # Assign a high probability (>= 0.8) to one unique site
             high_prob_site = np.random.choice(num_sites)
             select_number = select_and_add(high_prob_site, change_matrix)
-            tendency_transition_probabilities[t, i, select_number] = np.random.uniform(0.5, 0.85)
+            tendency_transition_probabilities[t, i, select_number] = np.random.uniform(0.8, 0.9)
             
             # Assign probabilities to other sites ensuring they sum to 1
             remaining_prob = 1.0 - tendency_transition_probabilities[t, i, select_number]
             other_probs = np.random.dirichlet(np.ones(num_sites - 1)) * remaining_prob
             
-            # Ensure the second highest probability is >= 0.15
+            # Ensure the second highest probability is >= 0.1
             sorted_other_probs = np.sort(other_probs)
-            if sorted_other_probs[-1] < 0.15:
-                diff = 0.15 - sorted_other_probs[-1]
+            if sorted_other_probs[-1] < 0.1:
+                diff = 0.1 - sorted_other_probs[-1]
                 sorted_other_probs[-1] += diff
                 sorted_other_probs[:-1] -= diff / (num_sites - 2)
             
@@ -68,32 +74,59 @@ def make_tendency_matrix():
     # print("Tendency Transition Probabilities (5x5x5 matrix):")
     # print(tendency_transition_probabilities)
 
+    # tendency_transition_probabilities = np.array([
+    #     [[0,1,0,0,0],
+    #      [0,0,1,0,0],
+    #      [0,0,0,1,0],
+    #      [0,0,0,0,1],
+    #      [1,0,0,0,0]],
+    #      [[0,0,0,0,1],
+    #      [0,0,0,1,0],
+    #      [0,0,1,0,0],
+    #      [0,1,0,0,0],
+    #      [1,0,0,0,0]],
+    #      [[0,0,0,1,0],
+    #      [0,0,1,0,0],
+    #      [0,1,0,0,0],
+    #      [1,0,0,0,0],
+    #      [0,0,0,0,1]],
+    #      [[1,0,0,0,0],
+    #      [0,1,0,0,0],
+    #      [0,0,1,0,0],
+    #      [0,0,0,1,0],
+    #      [0,0,0,0,1]],
+    #      [[0,1,0,0,0],
+    #      [0,0,1,0,0],
+    #      [0,0,0,1,0],
+    #      [0,0,0,0,1],
+    #      [1,0,0,0,0]]])
+    
     tendency_transition_probabilities = np.array([
-        [[0,1,0,0,0],
-         [0,0,1,0,0],
-         [0,0,0,1,0],
-         [0,0,0,0,1],
-         [1,0,0,0,0]],
-         [[0,0,0,0,1],
-         [0,0,0,1,0],
-         [0,0,1,0,0],
-         [0,1,0,0,0],
-         [1,0,0,0,0]],
-         [[0,0,0,1,0],
-         [0,0,1,0,0],
-         [0,1,0,0,0],
-         [1,0,0,0,0],
-         [0,0,0,0,1]],
-         [[1,0,0,0,0],
-         [0,1,0,0,0],
-         [0,0,1,0,0],
-         [0,0,0,1,0],
-         [0,0,0,0,1]],
-         [[0,1,0,0,0],
-         [0,0,1,0,0],
-         [0,0,0,1,0],
-         [0,0,0,0,1],
-         [1,0,0,0,0]]])
+    [[0.80, 0.05, 0.05, 0.05, 0.05],
+    [0.05, 0.80, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.80, 0.05, 0.05],
+    [0.05, 0.05, 0.05, 0.80, 0.05],
+    [0.05, 0.05, 0.05, 0.05, 0.80]],
+    [[0.05, 0.80, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.80, 0.05, 0.05],
+    [0.05, 0.05, 0.05, 0.80, 0.05],
+    [0.05, 0.05, 0.05, 0.05, 0.80],
+    [0.80, 0.05, 0.05, 0.05, 0.05]],
+    [[0.05, 0.80, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.80, 0.05, 0.05],
+    [0.05, 0.05, 0.05, 0.80, 0.05],
+    [0.80, 0.05, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.05, 0.05, 0.80]],
+    [[0.05, 0.80, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.80, 0.05, 0.05],
+    [0.80, 0.05, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.05, 0.80, 0.05],
+    [0.05, 0.05, 0.05, 0.05, 0.80]],
+    [[0.05, 0.80, 0.05, 0.05, 0.05],
+    [0.80, 0.05, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.80, 0.05, 0.05],
+    [0.05, 0.05, 0.05, 0.80, 0.05],
+    [0.05, 0.05, 0.05, 0.05, 0.80]]])
     # print("Tendency Transition Probabilities (5x5x5 matrix):")
     # print(tendency_transition_probabilities)
 

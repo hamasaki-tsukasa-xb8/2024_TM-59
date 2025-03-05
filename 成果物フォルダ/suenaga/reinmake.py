@@ -3,7 +3,7 @@ import random
 from parameters import make_tendency_matrix, make_similality_matrix
 
 class RecommenderAgent:
-    def __init__(self, sites, q_table=None, alpha=0.3, gamma=0.9, epsilon=0.4):
+    def __init__(self, sites, q_table=None, alpha=0.1, gamma=0.5, epsilon=0.5):
         self.sites = sites
         self.alpha = alpha  # 学習率
         self.gamma = gamma  # 割引率
@@ -70,7 +70,7 @@ def reinforce_main():
     agents = {player: RecommenderAgent(sites) for player in players}
 
     # # シミュレーション（例）
-    for episode in range(100):  # 1000回の学習を行う
+    for episode in range(1000):  # 1000回の学習を行う
         for player_idx, player in enumerate(players):
             agent = agents[player]
             current_site = random.choice(sites)  # ランダムに開始サイトを選択
