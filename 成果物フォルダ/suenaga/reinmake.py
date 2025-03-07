@@ -3,7 +3,7 @@ import random
 from parameters import make_tendency_matrix, make_similality_matrix
 
 class RecommenderAgent:
-    def __init__(self, sites, q_table=None, alpha=0.1, gamma=0.5, epsilon=0.5):
+    def __init__(self, sites, q_table=None, alpha=0.1, gamma=0.1, epsilon=0.1):
         self.sites = sites
         self.alpha = alpha  # 学習率
         self.gamma = gamma  # 割引率
