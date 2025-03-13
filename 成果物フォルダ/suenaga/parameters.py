@@ -22,7 +22,16 @@ def select_and_add(num, matrix):
     if num not in matrix:
         matrix = np.append(matrix, num)
         return num
+    
+def high_prob(select_number, range_number):
 
+    high_prob_site = np.random.choice(select_number)
+    
+    if high_prob_site==range_number:
+        print(high_prob_site, range_number)
+        return high_prob(select_number, range_number)
+    else:
+        return high_prob_site
 
 def make_tendency_matrix():
     # ある特徴を持つ人間のサイト遷移確率　（傾向Aから傾向E）　5つの要素は傾向AからE　行　サイト、　列　サイト
@@ -39,19 +48,19 @@ def make_tendency_matrix():
         change_matrix = np.array([])
 
         for i in range(num_sites):
-            # Assign a high probability (>= 0.8) to one unique site
-            high_prob_site = np.random.choice(num_sites)
+            # Assign a high probability (>= 0.95) to one unique site
+            high_prob_site = high_prob(num_sites, i)
             select_number = select_and_add(high_prob_site, change_matrix)
-            tendency_transition_probabilities[t, i, select_number] = np.random.uniform(0.8, 0.9)
+            tendency_transition_probabilities[t, i, select_number] = np.random.uniform(0.9, 0.95)
             
             # Assign probabilities to other sites ensuring they sum to 1
             remaining_prob = 1.0 - tendency_transition_probabilities[t, i, select_number]
             other_probs = np.random.dirichlet(np.ones(num_sites - 1)) * remaining_prob
             
-            # Ensure the second highest probability is >= 0.1
+            # Ensure the second highest probability is >= 0.05
             sorted_other_probs = np.sort(other_probs)
-            if sorted_other_probs[-1] < 0.1:
-                diff = 0.1 - sorted_other_probs[-1]
+            if sorted_other_probs[-1] < 0.05:
+                diff = 0.05 - sorted_other_probs[-1]
                 sorted_other_probs[-1] += diff
                 sorted_other_probs[:-1] -= diff / (num_sites - 2)
             
@@ -69,10 +78,6 @@ def make_tendency_matrix():
 
     # Round the transition probabilities to 2 decimal places
     tendency_transition_probabilities = np.round(tendency_transition_probabilities, 2)
-
-    # Print the transition probabilities matrix
-    print("Tendency Transition Probabilities (5x5x5 matrix):")
-    print(tendency_transition_probabilities)
 
     # tendency_transition_probabilities = np.array([
     #     [[0,1,0,0,0],
@@ -127,6 +132,10 @@ def make_tendency_matrix():
     # [0.05, 0.05, 0.80, 0.05, 0.05],
     # [0.05, 0.05, 0.05, 0.80, 0.05],
     # [0.05, 0.05, 0.05, 0.05, 0.80]]])
+    # print("Tendency Transition Probabilities (5x5x5 matrix):")
+    # print(tendency_transition_probabilities)
+
+    # Print the transition probabilities matrix
     # print("Tendency Transition Probabilities (5x5x5 matrix):")
     # print(tendency_transition_probabilities)
 

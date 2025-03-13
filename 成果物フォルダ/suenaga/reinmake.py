@@ -28,15 +28,8 @@ class RecommenderAgent:
     def update_q_table(self, state_index, action_index, reward, next_state_index):
         # Q値の更新
         best_next_q = np.max(self.q_table[next_state_index])
-        # print('self.alpha=', self.alpha)
-        # print('reward=',reward)
-        # print('self.gamma=',self.gamma)
-
-        # print('self.q_table=',self.q_table)
 
         self.q_table[state_index, action_index] += self.alpha * (reward + self.gamma * best_next_q - self.q_table[state_index, action_index])
-        # print(self.q_table[state_index, action_index])
-        # print(self.q_table)
 
     def recommend(self, current_site):
         # 現在のサイトに基づいて次に推薦するサイトを選択
@@ -70,7 +63,7 @@ def reinforce_main():
     agents = {player: RecommenderAgent(sites) for player in players}
 
     # # シミュレーション（例）
-    for episode in range(1000):  # 1000回の学習を行う
+    for episode in range(10000):  # 1000回の学習を行う
         for player_idx, player in enumerate(players):
             agent = agents[player]
             current_site = random.choice(sites)  # ランダムに開始サイトを選択
@@ -78,13 +71,6 @@ def reinforce_main():
             for step in range(10):  # 各エピソードで最大10ステップ
                 # 次のサイトを推薦
                 next_site = agent.recommend(current_site)
-                
-                # print(f"Player: {player}, Current Site: {current_site}, Recommended Site: {next_site}")
-                
-                # ユーザーが次のサイトをクリックするかどうかをシミュレート（仮に50%の確率でクリックする）
-                # random_value = random.random()
-                # print(random_value) 
-                # reward = 1 if random_value < 0.5 else 0
                 
                 # 状態遷移とQテーブルの更新
                 current_site_index = agent.get_state_index(current_site)
