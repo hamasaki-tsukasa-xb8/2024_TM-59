@@ -2,7 +2,7 @@ graph TD
     A[reinforce_main関数開始] --> B[サイトとプレイヤーのリストを定義]
     B --> C[make_similality_matrix関数を呼び出し類似率行列を生成]
     C --> D[make_tendency_matrix関数を呼び出しサイト遷移確率行列を生成]
-    D --> E[reward_tableを計算 (類似率行列 × サイト遷移確率行列)]
+    D --> E[reward_tableを計算 (類似率行列 * サイト遷移確率行列)]
     E --> F[RecommenderAgentインスタンスをプレイヤーごとに作成]
     F --> G{learning_num > 101か?}
     G -->|Yes| H[save_locale = "many_learning_results"]
@@ -21,10 +21,11 @@ graph TD
     S --> T[次のプレイヤーへ]
     T -->|全プレイヤー終了| U[reinforce_main関数終了]
 
+
     subgraph parameters.py
         D --> D1[make_tendency_matrix関数開始]
         D1 --> D2[サイト遷移確率行列を初期化]
-        D2 --> D3[高確率の遷移先を設定 (high_prob関数)]
+        D2 --> D3[高確率の遷移先を設定 high_prob関数]
         D3 --> D4[他の遷移先の確率をDirichlet分布で設定]
         D4 --> D5[確率を正規化し、負の値をクリップ]
         D5 --> D6[サイト遷移確率行列を返す]
