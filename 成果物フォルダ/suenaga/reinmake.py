@@ -107,27 +107,6 @@ def reinforce_main():
                 # 次の状態に遷移
                 current_site = next_site
 
-        # print(player)
-        # # print(agent.q_table)
-        # print(np.round(agent.q_table, 5))
-        # print("比較対象")
-        # print(reward_table[player_idx])
-        
-        # q_data = agent.q_table -np.min(agent.q_table) 
-        # print(q_data)
-        # # データの最小値と最大値を取得
-        # min_value = np.min(q_data)
-        # max_value = np.max(q_data)
-        # print(q_data)
-        # print(max_value)
-        # print(min_value)
-
-        # # データを0から1の範囲に正規化
-        # normalized_q_data = (q_data - min_value) / (max_value - min_value)
-        # normalized_q_data = q_data
-        # normalized_q_data -= min_value
-        # print(reward_table.shape)
-        # print(reward_table)
 
         for site_index in range(5):
             q_data = agent.q_table[site_index] -np.min(agent.q_table[site_index]) 
@@ -161,31 +140,6 @@ def reinforce_main():
             plt.savefig(save_path)
             plt.close()
             # plt.show()
-
-
-    # print("Tendency Transition Probabilities (5x5x5 matrix):")
-    # print(tendency_tables)    
-
-
     print("fin") 
-
-    # 各プレイヤーの学習後のQテーブルを表示
-    # qtable_box = []
-    # # player_box = []
-    # for player in players:
-    #     # print(f"学習後のQテーブル ({player}):")
-    #     # print(agents[player].q_table)
-    #     add = agents[player].q_table
-    #     qtable_box.append(add)
-    # # print(np.array(qtable_box).shape)
-    # # print(qtable_box)
-    # return qtable_box
-
 reinforce_main()
-
-# evaluation_method(reinforce_main())
-# a = np.array(reinforce_main())
-# print(a.shape)
-# print(type(reinforce_main()))
-
 
