@@ -1,6 +1,9 @@
 import numpy as np
 import random
 from parameters import make_tendency_matrix, make_similality_matrix
+from evaluation import evaluation_method
+import matplotlib.pyplot as plt
+import os
 
 class RecommenderAgent:
     def __init__(self, sites, q_table=None, alpha=0.1, gamma=0.1, epsilon=0.1):
@@ -28,8 +31,10 @@ class RecommenderAgent:
     def update_q_table(self, state_index, action_index, reward, next_state_index):
         # Q値の更新
         best_next_q = np.max(self.q_table[next_state_index])
-
+        # print('前q_table：',self.q_table)
         self.q_table[state_index, action_index] += self.alpha * (reward + self.gamma * best_next_q - self.q_table[state_index, action_index])
+        np.round(self.q_table, 5)
+        # print('後q_table：',self.q_table)
 
     def recommend(self, current_site):
         # 現在のサイトに基づいて次に推薦するサイトを選択
@@ -60,11 +65,25 @@ def reinforce_main():
 
     # 各プレイヤーに対してエージェントのインスタンスを作成
     # agents = {player: RecommenderAgent(sites, q_table=q_tables[idx]) for idx, player in enumerate(players)}
-    agents = {player: RecommenderAgent(sites) for player in players}
+   
+    alp=0.1
+    gam=0.9
+    eps=0.9
+    agents = {player: RecommenderAgent(sites, q_table=None, alpha=alp, gamma=gam, epsilon=eps) for player in players}
+
+    learning_num = 1000
+
+
+    if learning_num > 101:
+        save_locale = "many_learning_results"
+    else:
+        save_locale = "few_learning_results"
+    save_para = f"a{str(alp)[0]}{str(alp)[2]}_g{str(gam)[0]}{str(gam)[2]}_e{str(eps)[0]}{str(eps)[2]}"
+    # print(save_para)
 
     # # シミュレーション（例）
-    for episode in range(10000):  # 1000回の学習を行う
-        for player_idx, player in enumerate(players):
+    for player_idx, player in enumerate(players):
+        for episode in range(learning_num):  # 1000回の学習を行う
             agent = agents[player]
             current_site = random.choice(sites)  # ランダムに開始サイトを選択
             
@@ -78,26 +97,95 @@ def reinforce_main():
                 action_index = agent.get_state_index(next_site)
 
                 reward = reward_table[player_idx,current_site_index,next_site_index]
-                
+
+                # if reward > 0.89:
+                #     reward += 100.0
                 # Q値を更新
+
                 agent.update_q_table(current_site_index, action_index, reward, next_site_index)
                 
                 # 次の状態に遷移
                 current_site = next_site
 
+        # print(player)
+        # # print(agent.q_table)
+        # print(np.round(agent.q_table, 5))
+        # print("比較対象")
+        # print(reward_table[player_idx])
+        
+        # q_data = agent.q_table -np.min(agent.q_table) 
+        # print(q_data)
+        # # データの最小値と最大値を取得
+        # min_value = np.min(q_data)
+        # max_value = np.max(q_data)
+        # print(q_data)
+        # print(max_value)
+        # print(min_value)
 
+        # # データを0から1の範囲に正規化
+        # normalized_q_data = (q_data - min_value) / (max_value - min_value)
+        # normalized_q_data = q_data
+        # normalized_q_data -= min_value
+        # print(reward_table.shape)
+        # print(reward_table)
+
+        for site_index in range(5):
+            q_data = agent.q_table[site_index] -np.min(agent.q_table[site_index]) 
+            # print(q_data)
+            # データの最小値と最大値を取得
+            min_value = np.min(q_data)
+            max_value = np.max(q_data)
+            # print(q_data)
+            # print(max_value)
+            # print(min_value)
+
+            # データを0から1の範囲に正規化
+            normalized_q_data = (q_data - min_value) / (max_value - min_value)
+            # print(normalized_q_data)
+            plt.plot(normalized_q_data, label='学習後のQテーブルを正規化したもの')
+            plt.plot(reward_table[player_idx, site_index, :], label='類似した傾向が次のサイトへ遷移する確率')
+            plt.title(f"{player} in {sites[site_index]}")
+            plt.xlabel("次に遷移するサイト")
+            plt.ylabel("Q値(or確率)")
+            plt.xticks(ticks=range(5), labels=["サイトA", "サイトB", "サイトC", "サイトD", "サイトE"])
+            # plt.yticks(ticks=range(5), labels=["", "サイトB", "サイトC", "サイトD", "サイトE"])
+            plt.grid(True)
+            plt.legend(loc='upper right')
+        
+
+            # save_path = f"C:/Users/N25845/Desktop/TM59_git_folder/2024_TM-59/成果物フォルダ/suenaga/picture/{save_locale}/{save_para}/{player}_{sites[site_index]}.png"
+            save_midpath = f"C:/Users/N25845/Desktop/TM59_git_folder/2024_TM-59/成果物フォルダ/suenaga/other_case_picture/{save_para}"
+            save_path = f"C:/Users/N25845/Desktop/TM59_git_folder/2024_TM-59/成果物フォルダ/suenaga/other_case_picture/{save_para}/{player}_{sites[site_index]}.png"
+            if not os.path.exists(save_midpath):
+                os.makedirs(save_midpath)
+            plt.savefig(save_path)
+            plt.close()
+            # plt.show()
+
+
+    # print("Tendency Transition Probabilities (5x5x5 matrix):")
+    # print(tendency_tables)    
+
+
+    print("fin") 
 
     # 各プレイヤーの学習後のQテーブルを表示
-    qtable_box = []
-    # player_box = []
-    for player in players:
-        # print(f"学習後のQテーブル ({player}):")
-        # print(agents[player].q_table)
-        add = agents[player].q_table
-        qtable_box.append(add)
-    # print(np.array(qtable_box).shape)
-    # print(qtable_box)
-    return qtable_box
+    # qtable_box = []
+    # # player_box = []
+    # for player in players:
+    #     # print(f"学習後のQテーブル ({player}):")
+    #     # print(agents[player].q_table)
+    #     add = agents[player].q_table
+    #     qtable_box.append(add)
+    # # print(np.array(qtable_box).shape)
+    # # print(qtable_box)
+    # return qtable_box
 
 reinforce_main()
+
+# evaluation_method(reinforce_main())
+# a = np.array(reinforce_main())
+# print(a.shape)
+# print(type(reinforce_main()))
+
 

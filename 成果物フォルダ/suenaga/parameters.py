@@ -2,18 +2,18 @@ import numpy as np
 # 類似率の行列（人間Aは傾向Aとどれくらい似ているのか？） 行　人間、　列　傾向
 
 def make_similality_matrix():
-    # similarity_matrix = np.array([
-    # [0.80, 0.05, 0.05, 0.05, 0.05],
-    # [0.05, 0.80, 0.05, 0.05, 0.05],
-    # [0.05, 0.05, 0.80, 0.05, 0.05],
-    # [0.05, 0.05, 0.05, 0.80, 0.05],
-    # [0.05, 0.05, 0.05, 0.05, 0.80]])
     similarity_matrix = np.array([
-    [1, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 0, 1, 0],
-    [0, 0, 0, 0, 1]])
+    [0.80, 0.05, 0.05, 0.05, 0.05],
+    [0.05, 0.80, 0.05, 0.05, 0.05],
+    [0.05, 0.05, 0.80, 0.05, 0.05],
+    [0.05, 0.05, 0.05, 0.80, 0.05],
+    [0.05, 0.05, 0.05, 0.05, 0.80]])
+    # similarity_matrix = np.array([
+    # [1, 0, 0, 0, 0],
+    # [0, 1, 0, 0, 0],
+    # [0, 0, 1, 0, 0],
+    # [0, 0, 0, 1, 0],
+    # [0, 0, 0, 0, 1]])
     return similarity_matrix
 
 
@@ -28,7 +28,7 @@ def high_prob(select_number, range_number):
     high_prob_site = np.random.choice(select_number)
     
     if high_prob_site==range_number:
-        print(high_prob_site, range_number)
+        # print(high_prob_site, range_number)
         return high_prob(select_number, range_number)
     else:
         return high_prob_site
@@ -51,6 +51,7 @@ def make_tendency_matrix():
             # Assign a high probability (>= 0.95) to one unique site
             high_prob_site = high_prob(num_sites, i)
             select_number = select_and_add(high_prob_site, change_matrix)
+            # tendency_transition_probabilities[t, i, select_number] = np.random.uniform(0.6, 0.8)
             tendency_transition_probabilities[t, i, select_number] = np.random.uniform(0.9, 0.95)
             
             # Assign probabilities to other sites ensuring they sum to 1
